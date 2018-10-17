@@ -10,6 +10,7 @@ const _innerAudioContext = new WeakMap()
 const _src = new WeakMap()
 const _loop = new WeakMap()
 const _autoplay = new WeakMap()
+
 export default class Audio extends HTMLAudioElement {
   HAVE_NOTHING = HAVE_NOTHING
   HAVE_METADATA = HAVE_METADATA
@@ -30,7 +31,7 @@ export default class Audio extends HTMLAudioElement {
     innerAudioContext.onCanplay(() => {
       this.dispatchEvent({ type: 'load' })
       this.dispatchEvent({ type: 'loadend' })
-      this.dispatchEvent({ type: 'canplay'})
+      this.dispatchEvent({ type: 'canplay' })
       this.dispatchEvent({ type: 'canplaythrough' })
       this.dispatchEvent({ type: 'loadedmetadata' })
       this.readyState = HAVE_CURRENT_DATA
@@ -116,6 +117,7 @@ export default class Audio extends HTMLAudioElement {
 
   cloneNode() {
     const newAudio = new Audio()
+
     newAudio.loop = _innerAudioContext.get(this).loop
     newAudio.autoplay = _innerAudioContext.get(this).autoplay
     newAudio.src = this.src

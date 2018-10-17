@@ -4,7 +4,7 @@ module.exports = {
   entry: path.join(__dirname, '../src/index'),
   output: {
     path: path.join(__dirname, '../dist'),
-    filename: 'weapp-adapter.js',
+    filename: 'weapp-adapter-pixi.js',
   },
   module: {
     loaders: [

@@ -23,3 +23,5 @@ export { clearTimeout }
 export { clearInterval }
 export { requestAnimationFrame }
 export { cancelAnimationFrame }
+
+export TouchEvent from './EventIniter/TouchEvent'

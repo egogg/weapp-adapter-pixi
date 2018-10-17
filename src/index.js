@@ -3,7 +3,7 @@ import HTMLElement from './HTMLElement'
 
 const global = GameGlobal
 
-function inject () {
+function inject() {
   _window.addEventListener = (type, listener) => {
     _window.document.addEventListener(type, listener)
   }
