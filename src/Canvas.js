@@ -25,5 +25,8 @@ export default function Canvas() {
     return ret
   }
 
+  // pixi.js mapPositionToPoint hack
+  canvas.__proto__.parentElement = true
+
   return canvas
 }
