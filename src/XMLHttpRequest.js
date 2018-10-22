@@ -52,6 +52,10 @@ export default class XMLHttpRequest {
     _responseHeader.set(this, {})
   }
 
+  addEventListener(ev, cb) {
+    this[`on${ev}`] = cb
+  }
+
   abort() {
     const myRequestTask =  _requestTask.get(this)
 
@@ -85,6 +89,8 @@ export default class XMLHttpRequest {
     if (this.readyState !== XMLHttpRequest.OPENED) {
       throw new Error("Failed to execute 'send' on 'XMLHttpRequest': The object's state must be OPENED.")
     } else {
+      const responseType = this.responseType === 'blob' ?
+        (this.responseType = 'arraybuffer', 'blob') : null
       wx.request({
         data,
         url: _url.get(this),
@@ -105,9 +111,7 @@ export default class XMLHttpRequest {
           _triggerEvent.call(this, 'loadstart')
           _changeReadyState.call(this, XMLHttpRequest.HEADERS_RECEIVED)
           _changeReadyState.call(this, XMLHttpRequest.LOADING)
-
-          this.response = data
-
+          this.response = responseType === 'blob' ? _url.get(this) : data
           if (data instanceof ArrayBuffer) {
             this.responseText = ''
             const bytes = new Uint8Array(data)
@@ -120,7 +124,7 @@ export default class XMLHttpRequest {
             this.responseText = data
           }
           _changeReadyState.call(this, XMLHttpRequest.DONE)
-          _triggerEvent.call(this, 'load')
+          _triggerEvent.call(this, 'load', {target: this})
           _triggerEvent.call(this, 'loadend')
         },
         fail: ({ errMsg }) => {
@@ -141,9 +145,5 @@ export default class XMLHttpRequest {
 
     myHeader[header] = value
     _requestHeader.set(this, myHeader)
-  }
-
-  addEventListener(ev, cb) {
-    this[`on${ev}`] = cb
   }
 }
